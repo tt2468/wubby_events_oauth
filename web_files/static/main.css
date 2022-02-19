@@ -1,0 +1,264 @@
+html {
+    min-height:100%;
+    height: 100%;
+    width: 100%;
+    position:relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+body {
+    /*background-color: rgb(99, 99, 99);*/
+    background-color: #051720;
+    height: 100%;
+    width: 100%;
+    font-family: 'Noto Sans Mono', monospace;
+    font-size: 15px;
+}
+a {
+    color:rgb(93, 109, 248);
+}
+header {
+    background-color:#110617;
+    color: rgba(255, 255, 255, 0.7);
+    height: 70px;
+    width: 100%;
+    border-bottom: 2px solid rgba(225, 0, 255, 0.418);
+}
+
+footer {
+    background-color: #110617;
+    color: rgba(255, 255, 255, 0.7);
+    height: 60px;
+    width: 100%;
+    border-top: 2px solid rgba(225, 0, 255, 0.418);
+    align-items: center;
+    font-size: 12px;
+}
+
+nav {
+    float: left;
+}
+
+hr {
+    height: 2px;  
+    background-color: rgba(255, 255, 255, 0.527);  
+    margin-bottom: 7px;  
+    margin-top: 9px;  
+}  
+
+h3 {
+    display: block;
+    font-size: 1.17em;
+    margin: 0 auto;
+    margin-inline-end: 0px;
+    font-weight: bold;
+}
+
+.logo {
+    height: 100%;
+    min-width: 180px;
+    max-width: 80%;
+    float: left;
+}
+
+.container {
+    height: 100%;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.connect-win {
+    top: 6%;
+    height: 40%;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.contact-content {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: white;
+}
+
+.row{
+    width: 100%;
+}
+
+.r1 {
+    height: 100%;
+}
+
+.r2{
+    height: calc(100% - 134px);
+    width: 100%;
+    padding-top: 70px;
+    padding-bottom: 60px;
+}
+
+.r3 {
+    height: 80px;
+}
+
+.col {
+    float: left;
+    height: 100%;
+}
+
+.side {
+    background-color: transparent;
+    width: calc(17.5%);
+}
+
+
+.middle {
+    width: calc(65%);
+}
+
+.ms {
+    box-shadow: -3px 0px 3px rgba(65, 64, 64, 0.514), 3px 0px 3px rgba(65, 64, 64, 0.514), inset -1px 0px 0px rgb(0, 0, 0, 0.3), inset 1px 0px 0px rgba(0, 0, 0, 0.3);
+    color: rgba(255, 255, 255, 0.514);
+    clip-path: inset(0px -12px 0px);
+    background-color: rgb(73, 73, 73);
+}
+
+.center {
+    text-align: center;
+    align-content: center;
+}
+
+.discord-btn, .discord-btn:active, .discord-btn:visited {
+    border:0.16em solid rgba(255,255,255,0);
+    border-radius:2em;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    text-decoration:none;
+    font-family:'Roboto',sans-serif;
+    font-weight: 550;
+    text-transform: uppercase;
+    text-shadow: 0 0.04em 0.04em rgba(0,0,0,0.35);
+    text-align:center;
+    transition: all 0.2s;
+    background-color: #5865f2;
+    color: white;
+    display:inline; 
+  }
+
+  .discord-btn:hover{
+    border-color: rgba(255,255,255,1);
+  }
+
+  .title {
+    font-size: 38px; 
+    font-family: 'ABeeZee', sans-serif; 
+    text-decoration:none; 
+    color:white;
+  }
+
+  .btm-link {
+      text-decoration: underline;
+      color: rgba(255, 255, 255, 0.596);
+      text-align: center;
+      padding: 0;
+  }
+
+  .btm-li {
+      display: inline-block;
+      padding: 0;
+      padding-left: 2px;
+      padding-right: 2px;
+  }
+
+  .btm-ul {
+      padding-top: 10px;
+      padding-bottom: 10px;
+      display: inline-block;
+  }
+
+  .success {
+      color: rgb(163, 211, 163);
+  }
+
+  .fail {
+      color: rgb(228, 148, 148);
+  }
+
+  .left{
+      text-align: left;
+  }
+
+  .right {
+      text-align: right;
+  }
+
+  .merch-divs {
+    width: 100%;
+    background-color: #071f2b;
+    border: 2px solid rgb(86, 0, 97);
+    padding-top: 15px; 
+    padding-bottom:15px;
+  }
+  
+.merch-links {
+    color:white;
+    text-decoration: none;
+}
+
+.extended {
+    width:calc(100% - 20px);  
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.short {
+    width: 20%;  
+    margin-left:auto;
+    margin-right: auto;
+}
+
+.instructions {
+    color: white;
+    text-align: left;
+    
+}
+
+.sub-text-instructions {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.527);
+}
+
+.sig {
+    font-size: 12px;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.37);
+}
+
+
+#page-container {
+    position: relative;
+    min-height: 100vh;
+}
+
+#content-wrap {
+    padding-bottom: 2.5rem;
+}
+
+#footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 2.5rem;
+}
+
+.fixed-header, .fixed-footer{
+    width: 100%;
+    position: fixed;
+}
+.fixed-header{
+    top: 0;
+}
+.fixed-footer{
+    bottom: 0;
+}
