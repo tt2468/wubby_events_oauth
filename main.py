@@ -1,14 +1,32 @@
 import logging
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] [%(funcName)s] %(message)s")
+logging.getLogger('aiohttp').setLevel(logging.WARNING)
 import os
-from dataclasses import dataclass
+import json
 import asyncio
+import urllib.parse
 import aiohttp
+import asyncio_redis
+from dataclasses import dataclass
 from aiohttp import web
 
-DISCORD_CLIENT_ID = os.getenv('WUBBY_EVENTS_OAUTH_DISCORD_CLIENT_ID')
+# Get configs from env
+DISCORD_CLIENT_ID = int(os.getenv('WUBBY_EVENTS_OAUTH_DISCORD_CLIENT_ID'))
 DISCORD_CLIENT_SECRET = os.getenv('WUBBY_EVENTS_OAUTH_DISCORD_SECRET')
-DISCORD_REDIRECT_URI = os.getenv('WUBBY_EVENTS_OAUTH_DISCORD_REDIRECT_URI') # 'https://events.wubby.tv/oauth/callback'
+DISCORD_CALLBACK_URL = os.getenv('WUBBY_EVENTS_OAUTH_DISCORD_CALLBACK_URL') # 'https://events.wubby.tv/oauth/callback'
+RESULT_BASE_URL = os.getenv('WUBBY_EVENTS_OAUTH_RESULT_BASE_URL')
+REDIS_HOST = os.getenv('WUBBY_EVENTS_OAUTH_REDIS_HOST')
+REDIS_PASSWORD = os.getenv('WUBBY_EVENTS_OAUTH_REDIS_PASSWORD')
+
+# Build redirect url from above configs
+DISCORD_REDIRECT_URL = 'https://discord.com/api/oauth2/authorize?client_id={}&redirect_uri={}&response_type=code&scope=identify%20connections'.format(DISCORD_CLIENT_ID, urllib.parse.quote(DISCORD_CALLBACK_URL))
+
+# Result page suffixes
+RESULT_PAGE_SUCCESS = '/success.html'
+RESULT_PAGE_INTERNAL_ERROR = '/internal_error.html'
+RESULT_PAGE_NO_TWITCH = '/twitch_not_linked.html'
+
+redis = None
 
 @dataclass
 class GenericAccount:
@@ -16,7 +34,10 @@ class GenericAccount:
     username: str
 
 async def log_request(resp):
-    print('Made {} request to url {}, got response code {} with text {}'.format(resp.method, resp.url, resp.status, await resp.text()))
+    logFunction = logging.debug
+    if not resp.ok:
+        logFunction = logging.warning
+    logFunction('Made {} request to url {}, got response code {} with text {}'.format(resp.method, resp.url, resp.status, await resp.text()))
 
 async def fetch_discord_token(code):
     url = 'https://discord.com/api/v8/oauth2/token'
@@ -26,7 +47,7 @@ async def fetch_discord_token(code):
         'client_secret': DISCORD_CLIENT_SECRET,
         'grant_type': 'authorization_code',
         'code': code,
-        'redirect_uri': DISCORD_REDIRECT_URI
+        'redirect_uri': DISCORD_CALLBACK_URL
     }
 
     async with aiohttp.ClientSession() as session:
@@ -72,25 +93,62 @@ async def fetch_twitch_account(token):
                     return GenericAccount(id, username)
             return None
 
-async def handle_oauth(request):
+async def handle_callback(request):
+    logging.info('New request to /callback from IP {}'.format(request.headers.get('CF-Connecting-IP')))
+
+    if not redis or not redis.connections_connected:
+        logging.error('No active redis connections!')
+        return web.HTTPFound(DISCORD_CALLBACK_URL + RESULT_PAGE_INTERNAL_ERROR)
+
     code = request.query.get('code')
     if not code:
-        return web.Response(text='No code!')
+        logging.warning('No `code` query parameter!')
+        return web.HTTPFound(DISCORD_CALLBACK_URL + RESULT_PAGE_INTERNAL_ERROR)
     token = await fetch_discord_token(code)
     if not token:
-        return web.Response(text='Failed to get token!')
+        logging.error('Unable to fetch token with code!')
+        return web.HTTPFound(DISCORD_CALLBACK_URL + RESULT_PAGE_INTERNAL_ERROR)
     discordAccount = await fetch_discord_account(token)
     if not discordAccount:
-        return web.Response(text='Failed to get Discord account!')
+        logging.error('Unable to fetch discord account with token!')
+        return web.HTTPFound(DISCORD_CALLBACK_URL + RESULT_PAGE_INTERNAL_ERROR)
     twitchAccount = await fetch_twitch_account(token)
     if not twitchAccount:
-        return web.Response(text='Failed to get Twitch account!')
+        logging.info('No Twitch accounts found.')
+        return web.HTTPFound(DISCORD_CALLBACK_URL + RESULT_PAGE_NO_TWITCH)
 
-    text = 'Your Discord account is {} and your twitch account is {}'.format(discordAccount.username, twitchAccount.username)
-    return web.Response(text=text)
+    keyName = 'wubby_events_' + str(discordAccount.id)
+    key = await redis.get(keyName)
+    if key:
+        keyData = json.loads(key)
+        logging.info('Discord account already registered. Old/New Discord: {}/{} | Old/New Twitch: {}/{}'.format(keyData['discordUsername'], discordAccount.username, keyData['twitchUsername'], twitchAccount.username))
+    else:
+        logging.info('Discord account {} registered as Twitch user {} successfully.'.format(discordAccount.username, twitchAccount.username))
+
+    newKeyData = {'discordUsername': discordAccount.username, 'twitchId': twitchAccount.id, 'twitchUsername': twitchAccount.username}
+    await redis.set(keyName, json.dumps(newKeyData))
+
+    return web.HTTPFound(DISCORD_CALLBACK_URL + RESULT_PAGE_SUCCESS)
+
+async def handle_redirect(request):
+    logging.info('New request to /redirect from IP {}'.format(request.headers.get('CF-Connecting-IP')))
+    return web.HTTPFound(DISCORD_REDIRECT_URL)
+
+async def on_startup(app):
+    global redis
+    redis = await asyncio_redis.Pool.create(host=REDIS_HOST, port=6379, password=REDIS_PASSWORD, poolsize=5)
+    logging.info('Finished starting.')
+
+async def on_shutdown(app):
+    if redis:
+        redis.close()
+        redis = None
+    logging.info('Finished shutting down.')
 
 app = web.Application()
-app.add_routes([web.get('/', handle_oauth)])
+app.add_routes([web.get('/redirect', handle_redirect), web.get('/callback', handle_callback)])
+app.on_startup.append(on_startup)
+app.on_shutdown.append(on_shutdown)
 
 if __name__ == '__main__':
     web.run_app(app, port=6900)
