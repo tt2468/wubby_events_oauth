@@ -8,9 +8,7 @@ from aiohttp import web
 
 DISCORD_CLIENT_ID = os.getenv('WUBBY_EVENTS_OAUTH_DISCORD_CLIENT_ID')
 DISCORD_CLIENT_SECRET = os.getenv('WUBBY_EVENTS_OAUTH_DISCORD_SECRET')
-DISCORD_REDIRECT_URI = os.getenv('WUBBY_EVENTS_OAUTH_DISCORD_REDIRECT_URI') # 'https://events.wubby.tv/oauth'
-
-# https://discord.com/api/oauth2/authorize?client_id=489538588120449039&redirect_uri=https%3A%2F%2Fevents.wubby.tv%2Foauth&response_type=code&scope=identify%20connections
+DISCORD_REDIRECT_URI = os.getenv('WUBBY_EVENTS_OAUTH_DISCORD_REDIRECT_URI') # 'https://events.wubby.tv/oauth/callback'
 
 @dataclass
 class GenericAccount:
