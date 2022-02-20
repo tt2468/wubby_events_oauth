@@ -13,15 +13,15 @@ from aiohttp import web
 # Get configs from env
 DISCORD_CLIENT_ID = int(os.getenv('WUBBY_EVENTS_OAUTH_DISCORD_CLIENT_ID'))
 DISCORD_CLIENT_SECRET = os.getenv('WUBBY_EVENTS_OAUTH_DISCORD_SECRET')
-DISCORD_CALLBACK_URL = os.getenv('WUBBY_EVENTS_OAUTH_DISCORD_CALLBACK_URL') # 'https://events.wubby.tv/oauth/callback'
-RESULT_BASE_URL = os.getenv('WUBBY_EVENTS_OAUTH_RESULT_BASE_URL')
 REDIS_HOST = os.getenv('WUBBY_EVENTS_OAUTH_REDIS_HOST')
 REDIS_PASSWORD = os.getenv('WUBBY_EVENTS_OAUTH_REDIS_PASSWORD')
 
-# Build redirect url from above configs
+# Build redirect url
+DISCORD_CALLBACK_URL = 'https://events.wubby.tv/oauth/callback'
 DISCORD_REDIRECT_URL = 'https://discord.com/api/oauth2/authorize?client_id={}&redirect_uri={}&response_type=code&scope=identify%20connections'.format(DISCORD_CLIENT_ID, urllib.parse.quote(DISCORD_CALLBACK_URL))
 
 # Result page suffixes
+RESULT_BASE_URL = 'https://events.wubby.tv/result'
 RESULT_PAGE_SUCCESS = '/success.html'
 RESULT_PAGE_INTERNAL_ERROR = '/internal_error.html'
 RESULT_PAGE_NO_TWITCH = '/twitch_not_linked.html'
@@ -98,24 +98,24 @@ async def handle_callback(request):
 
     if not redis or not redis.connections_connected:
         logging.error('No active redis connections!')
-        return web.HTTPFound(DISCORD_CALLBACK_URL + RESULT_PAGE_INTERNAL_ERROR)
+        return web.HTTPFound(RESULT_BASE_URL + RESULT_PAGE_INTERNAL_ERROR)
 
     code = request.query.get('code')
     if not code:
         logging.warning('No `code` query parameter!')
-        return web.HTTPFound(DISCORD_CALLBACK_URL + RESULT_PAGE_INTERNAL_ERROR)
+        return web.HTTPFound(RESULT_BASE_URL + RESULT_PAGE_INTERNAL_ERROR)
     token = await fetch_discord_token(code)
     if not token:
         logging.error('Unable to fetch token with code!')
-        return web.HTTPFound(DISCORD_CALLBACK_URL + RESULT_PAGE_INTERNAL_ERROR)
+        return web.HTTPFound(RESULT_BASE_URL + RESULT_PAGE_INTERNAL_ERROR)
     discordAccount = await fetch_discord_account(token)
     if not discordAccount:
         logging.error('Unable to fetch discord account with token!')
-        return web.HTTPFound(DISCORD_CALLBACK_URL + RESULT_PAGE_INTERNAL_ERROR)
+        return web.HTTPFound(RESULT_BASE_URL + RESULT_PAGE_INTERNAL_ERROR)
     twitchAccount = await fetch_twitch_account(token)
     if not twitchAccount:
         logging.info('No Twitch accounts found.')
-        return web.HTTPFound(DISCORD_CALLBACK_URL + RESULT_PAGE_NO_TWITCH)
+        return web.HTTPFound(RESULT_BASE_URL + RESULT_PAGE_NO_TWITCH)
 
     keyName = 'wubby_events_' + str(discordAccount.id)
     key = await redis.get(keyName)
@@ -128,7 +128,7 @@ async def handle_callback(request):
     newKeyData = {'discordUsername': discordAccount.username, 'twitchId': twitchAccount.id, 'twitchUsername': twitchAccount.username}
     await redis.set(keyName, json.dumps(newKeyData))
 
-    return web.HTTPFound(DISCORD_CALLBACK_URL + RESULT_PAGE_SUCCESS)
+    return web.HTTPFound(RESULT_BASE_URL + RESULT_PAGE_SUCCESS)
 
 async def handle_redirect(request):
     logging.info('New request to /redirect from IP {}'.format(request.headers.get('CF-Connecting-IP')))
@@ -140,6 +140,7 @@ async def on_startup(app):
     logging.info('Finished starting.')
 
 async def on_shutdown(app):
+    global redis
     if redis:
         redis.close()
         redis = None
