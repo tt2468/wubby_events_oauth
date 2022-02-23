@@ -15,82 +15,69 @@
 
 <title>PaymoneyWubby Events Registration</title>
 
-<link rel="stylesheet" type="text/css" href="/static/main.css">
+<link rel="stylesheet" type="text/css" href="/static/mainV2.css">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mono&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=ABeeZee&display=swap" rel="stylesheet">
-
+<script type="text/javascript" src="/static/scripts.js"></script>
 </head>
 
 
-<body>
-    <header class="fixed-header">
-        <div class="container">
-            <div class="row r1">
-                <div class="col side center">
-                    <a href="/index.html"> <img src="/static/wubbybanner.jpeg" alt="logo" class="logo"></a>
-                </div>
-                <div class="col middle center">
-                    <p><a class="title" href="/index.html">Wubby Event Registration</a></p>
-                </div>
-                <div class="col side center">
-                </div>
-            <div>
+<body onload="getSize()" onresize="getSize()">
+    <header class="fixed-header center" id="header">
+        <div style="display: inline; height: 100%;">
+            <a href="/index.html"> <img src="/static/wubbybanner.jpeg" alt="logo" id="logo" class="logo"></a>
         </div>
+        <div style="display: inline; height: 100%;">
+            <p id='title' style="max-width: max-content; min-width: min-content; margin-left: auto; margin-right: auto;"><a class="title" href="/index.html">Wubby Event Registration</a></p>
+        </div>
+        
     </header>
-    <div class="row r2">
-        <div class="col side center">
-        </div>
-        <div class="col middle center">
-            <div class="connect-win center">
-                <div class="contact-content center">
-                    <h3 style="color:rgb(255, 163, 163); font-size: 32px;">Your Twitch account must be linked to Discord before authorization.</h3>
-                    <div>
-                        <p class='sub-text-muted'>Follow the steps below to make sure your twitch account is linked to discord.</p>
-                    </div>
-                    <hr class="extended">
-                    <div class="instructions center">
-                        <p class='sub-text-muted center'>Step 1: Open discord and go to your settings menu.</p>
-                        <div class="center">
-                            <p class="sub-text-instructions center"> Now in the settings menu, navigate to the "Connections" section </p>
-                            <img src="/static/wi1.png" style="max-width:100%;">
-                        </div>
-                    </div>
-                    <hr class="extended">
-                    <div class="instructions center">
-                        <p class='sub-text-muted center'>Step 2: Determine if your twitch account is already linked to discord, or not.</p>
-                        <div class="center">
-                            <p class="sub-text-instructions center" style="max-width: 40%; text-align: center; margin-left: auto; margin-right: auto;"> 
-                                On the Connections page in your settings menu, if you have some variation of the content inside the red highlighted box, your account is already connected. Note: If you have a grey X and not a green check mark for the field "Display on profile", it does not matter. The account is still linked to Discord.
-                            </p>
-                            <img class="center" src="/static/checkaccount.png" style="max-width:70%;">
-                        </div>
-                    </div>
-                    <hr class="extended">
-                    <div class="instructions center"></div>
-                    <p class='sub-text-muted center'>Step 3: If you do not see the information above, continue here with step 3, otherwise you can skip to step 4. </p>
-                        <div style="display:inline-block; margin-left:auto; margin-right:auto;">
-                            <p class="sub-text-instructions center"> Select the twitch icon under the connections header and log in as prompted. </p>
-                            <img src="/static/wi2.png" style="max-width:100%;">
-                        </div>
-                    </div>
-                    <hr class="extended">
-                    <div class="instructions center">
-                        <p class='sub-text-muted center'>Step 4: Now that you have linked, or verified your Twitch account is already linked, click the button below to return to the authorization process!</p>
-                    </div>
-                    <form action="/index.html">
-                        <input type="submit" id="discordbtn" class="discord-btn" style="font-size: 16px; padding-left: 15px; padding-right: 15px;"value="Return"/>
-                    </form>
-                    <hr class="extended">
+    <div id="content" style="width: 80%; margin-left: auto; margin-right: auto; color:white; text-align: center;">
+        <div class="contact-content center">
+            <h3 style="color:rgb(255, 163, 163); font-size: 32px;">Your Twitch account must be linked to Discord before authorization.</h3>
+            <div>
+                <p class='sub-text-muted'>Follow the steps below to make sure your twitch account is linked to discord.</p>
+            </div>
+            <hr class="extended">
+            <div class="instructions center">
+                <p class='sub-text-muted center'>Step 1: Open discord and go to your settings menu.</p>
+                <div class="center">
+                    <p class="sub-text-instructions center"> Now in the settings menu, navigate to the "Connections" section </p>
+                    <img src="/static/wi1.png" style="max-width:100%;">
                 </div>
             </div>
-        </div>
-        <div class="col side center">
+            <hr class="extended">
+            <div class="instructions center">
+                <p class='sub-text-muted center'>Step 2: Determine if your twitch account is already linked to discord, or not.</p>
+                <div class="center">
+                    <p class="sub-text-instructions center" style="max-width: 40%; text-align: center; margin-left: auto; margin-right: auto;"> 
+                        On the Connections page in your settings menu, if you have some variation of the content inside the red highlighted box, your account is already connected. Note: If you have a grey X and not a green check mark for the field "Display on profile", it does not matter. The account is still linked to Discord.
+                    </p>
+                    <img class="center" src="/static/checkaccount.png" style="max-width:70%;">
+                </div>
+            </div>
+            <hr class="extended">
+            <div class="instructions center"></div>
+            <p class='sub-text-muted center'>Step 3: If you do not see the information above, continue here with step 3, otherwise you can skip to step 4. </p>
+                <div style="display:inline-block; margin-left:auto; margin-right:auto;">
+                    <p class="sub-text-instructions center"> Select the twitch icon under the connections header and log in as prompted. </p>
+                    <img src="/static/wi2.png" style="max-width:100%;">
+                </div>
+            </div>
+            <hr class="extended">
+            <div class="instructions center">
+                <p class='sub-text-muted center'>Step 4: Now that you have linked, or verified your Twitch account is already linked, click the button below to return to the authorization process!</p>
+            </div>
+            <form action="/index.html">
+                <input type="submit" id="discordbtn" class="discord-btn" style="font-size: 16px; padding-left: 15px; padding-right: 15px;"value="Return"/>
+            </form>
+            <hr class="extended">
         </div>
     </div>
-    <footer class="fixed-footer center">
+    <footer class="center">
         <p>Follow PaymoneyWubby on <a href="https://www.twitch.tv/paymoneywubby" target="_blank">Twitch</a>, <a href="https://www.youtube.com/user/PaymoneyWubby" target="_blank">YouTube</a>, and <a href="https://twitter.com/PaymoneyWubby" target="_blank">Twitter</a>. 
             Made by <a class="authors" href="https://github.com/tt2468" target="_blank">tt2468</a>, <a class="authors" href="https://discordapp.com/users/106035625047629824" target="_blank">AquaticSnipes</a>, and <a class="authors" href="https://github.com/Xathz" target="_blank">Xathz</a>
         </p>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html style="overflow: hidden;">
+<html style="overflow: auto;">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta property="og:title" content="PaymoneyWubby Events Registration">
@@ -13,71 +13,55 @@
     <meta property="og:image:height" content="480">
     <title>PaymoneyWubby Events Registration</title>
     
-    <link rel="stylesheet" type="text/css" href="static/main.css">
+    <link rel="stylesheet" type="text/css" href="static/mainV2.css">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=ABeeZee&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mono&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&display=swap" rel="stylesheet">
-
+    <script type="text/javascript" src="static/scripts.js"></script>
 </head>
-<body>
-    <header class="fixed-header">
-        <div class="container">
-            <div class="row r1">
-                <div class="col side center">
-                    <a href="index.html"> <img src="static/wubbybanner.jpeg" alt="logo" class="logo"></a>
-                </div>
-                <div class="col middle center">
-                    <p><a class="title" href="index.html">Wubby Event Registration</a></p>
-                </div>
-                <div class="col side center">
-                </div>
-            <div>
+<body onload="getSize()" onresize="getSize()">
+    <header class="fixed-header center" id="header">
+        <div style="display: inline; height: 100%;">
+            <a href="index.html"> <img src="static/wubbybanner.jpeg" alt="logo" id="logo" class="logo"></a>
+        </div>
+        <div style="display: inline; height: 100%;">
+            <p id='title' style="max-width: max-content; min-width: min-content; margin-left: auto; margin-right: auto;"><a class="title" href="index.html">Wubby Event Registration</a></p>
         </div>
     </header>
-    <div class="row r2">
-        <div class="col side center">
+    <div id="content"style="width: 80%; margin-left: auto; margin-right: auto; color:white; text-align: center;">
+        <h3 style="font-family: 'Syncopate', sans-serif; font-size: 32px; padding-top:20px; padding-bottom: 20px;">Welcome</h3>
+        <div>
+            <p class='sub-text-muted'>Please read the brief instructions below to join the event discord.</p>
         </div>
-        <div class="col middle center">
-            <div class="connect-win center">
-                <div class="contact-content center">
-                    <h3 style="font-family: 'Syncopate', sans-serif; font-size: 32px; padding-top:20px; padding-bottom: 20px;">Welcome</h3>
-                    <div>
-                        <p class='sub-text-muted'>Please read the brief instructions below to join the event discord.</p>
-                    </div>
-                    <hr class="extended">
-                    <div class="center">
-                        <p class='sub-text-muted' style="text-indent:30px; width:60%; text-align: center; margin-left:auto; margin-right:auto;">If you are subscribed to PaymoneyWubby on Twitch.tv you will be able to join the event discord server. This process will help you join the server, and give you a role that provides the oppurtunity to participate in future events.</p>
-                        <div style="display:inline-block; margin-left:auto; margin-right:auto;">
-                            <ul>
-                                Requirements:
-                                <li style="text-align:left; padding-top: 5px;">
-                                    Be a subscriber to <a href="https://www.twitch.tv/paymoneywubby/" style="color:rgb(181, 220, 255); text-decoration: none;" target="_blank">PaymoneyWubby on Twitch</a>.
-                                </li>
-                                <li style="text-align:left; padding-top: 5px;">
-                                    Have your Twitch account linked to your Discord account.
-                                    (<a class="sub-text-instructions " style="text-align: center; margin-left:auto; margin-right:auto; text-decoration: none;" href="result/twitch_not_linked.html">How do I check this?</a>)
+        <hr class="extended">
+        <div class="center">
+            <p class='sub-text-muted' style="text-indent:30px; width:60%; text-align: center; margin-left:auto; margin-right:auto;">If you are subscribed to PaymoneyWubby on Twitch.tv you will be able to join the event discord server. This process will help you join the server, and give you a role that provides the oppurtunity to participate in future events.</p>
+            <div style="display:inline-block; margin-left:auto; margin-right:auto;">
+                <ul>
+                    Requirements:
+                    <li style="text-align:left; padding-top: 5px;">
+                        Be a subscriber to <a href="https://www.twitch.tv/paymoneywubby/" style="color:rgb(181, 220, 255); text-decoration: none;" target="_blank">PaymoneyWubby on Twitch</a>.
+                    </li>
+                    <li style="text-align:left; padding-top: 5px;">
+                        Have your Twitch account linked to your Discord account.
+                        (<a class="sub-text-instructions " style="text-align: center; margin-left:auto; margin-right:auto; text-decoration: none;" href="result/twitch_not_linked.html">How do I check this?</a>)
 
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <hr class="extended">
-                    <p class='sub-text-muted'>If you meet the requirements, click the "Connect" button below, and wait for your role in the server!</p>
-                
-                    <form action="https://events.wubby.tv/oauth/redirect">
-                        <input type="submit" id="discordbtn" class="discord-btn" value="Connect"/>
-                    </form>
-                    <hr class="extended">
-                </div>
+                    </li>
+                </ul>
             </div>
         </div>
-        <div class="col side center">
-        </div>
+        <hr class="extended">
+        <p class='sub-text-muted'>If you meet the requirements, click the "Connect" button below, and wait for your role in the server!</p>
+                
+        <form action="https://events.wubby.tv/oauth/redirect">
+            <input type="submit" id="discordbtn" class="discord-btn" value="Connect"/>
+        </form>
+        <hr class="extended">
     </div>
-    <footer class="fixed-footer center">
+    <footer class="center">
         <p>Follow PaymoneyWubby on <a href="https://www.twitch.tv/paymoneywubby" target="_blank">Twitch</a>, <a href="https://www.youtube.com/user/PaymoneyWubby" target="_blank">YouTube</a>, and <a href="https://twitter.com/PaymoneyWubby" target="_blank">Twitter</a>. 
             Made by <a class="authors" href="https://github.com/tt2468" target="_blank">tt2468</a>, <a class="authors" href="https://discordapp.com/users/106035625047629824" target="_blank">AquaticSnipes</a>, and <a class="authors" href="https://github.com/Xathz" target="_blank">Xathz</a>
         </p>

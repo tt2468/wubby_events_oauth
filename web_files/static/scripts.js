@@ -1,5 +1,4 @@
 function getSize() {
-
     var footerHeight = 62;
     var heightOffset = 0;
     var w = document.documentElement.clientWidth;
