@@ -25,6 +25,7 @@ RESULT_BASE_URL = 'https://events.wubby.tv/result'
 RESULT_PAGE_SUCCESS = '/success.html'
 RESULT_PAGE_INTERNAL_ERROR = '/internal_error.html'
 RESULT_PAGE_NO_TWITCH = '/twitch_not_linked.html'
+RESULT_PAGE_JOINING_DISABLED = '/joining_disabled.html'
 
 redis = None
 
@@ -132,6 +133,8 @@ async def handle_callback(request):
 
 async def handle_redirect(request):
     logging.info('New request to /redirect from IP {}'.format(request.headers.get('CF-Connecting-IP')))
+    #logging.debug('Returning joining disabled result...')
+    # return web.HTTPFound(RESULT_BASE_URL + RESULT_PAGE_JOINING_DISABLED)
     return web.HTTPFound(DISCORD_REDIRECT_URL)
 
 async def on_startup(app):
